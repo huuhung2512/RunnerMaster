@@ -59,7 +59,18 @@ public class PlayerController : MonoBehaviour
         {
             targetPossition += Vector3.right * landDistance;
         }
-        transform.position = Vector3.Lerp(transform.position, targetPossition, 80 * Time.fixedDeltaTime);
+        // transform.position = Vector3.Lerp(transform.position, targetPossition, 80 * Time.fixedDeltaTime);
+        // controller.center = controller.center;
+        if(transform.position == targetPossition)
+            return;
+        Vector3 diff = targetPossition - transform.position;
+        Vector3 moveDir = diff.normalized *25*Time.deltaTime;
+
+        if(moveDir.sqrMagnitude < diff.sqrMagnitude){
+            controller.Move(moveDir);
+        }else{
+            controller.Move(diff);
+        }
     }
     private void FixedUpdate()
     {
