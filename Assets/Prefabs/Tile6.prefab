@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1169238773959106520}
   - component: {fileID: 4025390348177173266}
   - component: {fileID: 1169238773959106523}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Road
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,13 +142,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_Barrier02
       objectReference: {fileID: 0}
+    - target: {fileID: 151096, guid: 367149bd17c4d4d4e8868ec6a5cf8d45, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     - target: {fileID: 451094, guid: 367149bd17c4d4d4e8868ec6a5cf8d45, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.5647225
+      value: 1.016656
       objectReference: {fileID: 0}
     - target: {fileID: 451094, guid: 367149bd17c4d4d4e8868ec6a5cf8d45, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.323513
+      value: 1.2040883
       objectReference: {fileID: 0}
     - target: {fileID: 451094, guid: 367149bd17c4d4d4e8868ec6a5cf8d45, type: 3}
       propertyPath: m_LocalPosition.x
@@ -160,7 +164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 451094, guid: 367149bd17c4d4d4e8868ec6a5cf8d45, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.0002
+      value: 2.4106
       objectReference: {fileID: 0}
     - target: {fileID: 451096, guid: 367149bd17c4d4d4e8868ec6a5cf8d45, type: 3}
       propertyPath: m_RootOrder
@@ -229,5 +233,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.2693291, y: 1.1518161, z: 7.8350344}
-  m_Center: {x: -0.15658577, y: 1.6902024, z: 0.028210044}
+  m_Size: {x: 0.2693291, y: 1.0520799, z: 3.1341565}
+  m_Center: {x: -0.15658577, y: 1.550099, z: 2.3786497}
