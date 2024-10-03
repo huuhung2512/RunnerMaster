@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,6 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private Vector3 direction;
     public float fowardSpeed;
-
     public float maxSpeed;
     public bool isGrounded;
     public LayerMask groundLayer;
@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float landDistance = 4; // khoang cach giua 2 làn
     public float jumpForce;
     private bool isSliding = false;
+    private bool isFalling = false;
     public float Gravity = -20;
     private Animator animator;
     private Coroutine slideCoroutine;
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
         }
         animator.SetBool("isGameStarted", true);
         animator.SetBool("isGrounded", isGrounded);
+        animator.SetBool("isFall",isFalling);
         direction.z = fowardSpeed;
 
         // Lấy ra đầu vào để di chuyển trên làn đường
@@ -58,6 +60,7 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, 0.15f, groundLayer);
         if (isGrounded)
         {
+            isFalling = false;
             if (SwipeManager.swipeUp)
             {
                 if (isSliding && slideCoroutine != null)
@@ -66,6 +69,7 @@ public class PlayerController : MonoBehaviour
                     StopCoroutine(slideCoroutine);
                     ResetSlide();
                     Jump();
+                    isSliding = false;
                 }
                 else
                 {
@@ -76,6 +80,10 @@ public class PlayerController : MonoBehaviour
         else
         {
             direction.y += Gravity * Time.deltaTime;
+            if (direction.y < 0)
+            {
+                isFalling = true;
+            }
         }
         if (SwipeManager.swipeDown && !isSliding)
         {
@@ -117,10 +125,8 @@ public class PlayerController : MonoBehaviour
     {
         direction.y = jumpForce;
     }
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.transform.tag == "Obstacle")
+    private void OnTriggerEnter(Collider other) {
+        if (other.transform.tag == "Obstacle")
         {
             PlayerManager.gameOver = true;
         }
@@ -129,10 +135,10 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Slide()
     {
         isSliding = true;
-        animator.SetBool("isSliding", true);
-        controller.center = new Vector3(0, 0.11f, 0);
+        isFalling = false;
+        animator.SetBool("isSliding", isSliding);
+        controller.center = new Vector3(0, 0.225f, 0);
         controller.height = 0f;
-
         float elapsedTime = 0f;
         float slideDuration = 1.1f;
 
@@ -143,7 +149,8 @@ public class PlayerController : MonoBehaviour
             {
                 // Nếu vuốt lên thì dừng slide và nhảy ngay lập tức
                 ResetSlide();
-                Jump(); // Gọi hàm nhảy ngay lập tức
+                Jump();
+                isFalling = false; // Gọi hàm nhảy ngay lập tức
                 yield break; // Dừng coroutine tại đây
             }
             elapsedTime += Time.deltaTime;
@@ -158,7 +165,8 @@ public class PlayerController : MonoBehaviour
         // Thiết lập lại trạng thái của nhân vật sau khi dừng slide
         controller.center = new Vector3(0, 0.4f, 0);
         controller.height = 0.8f;
-        animator.SetBool("isSliding", false);
         isSliding = false;
+        animator.SetBool("isSliding", isSliding);
     }
+   
 }

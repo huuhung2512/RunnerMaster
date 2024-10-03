@@ -13,6 +13,7 @@ public class PlayerManager : MonoBehaviour
     {
         gameOver = false;
         isGameStarted = false;
+        
         Time.timeScale = 1;
     }
 
