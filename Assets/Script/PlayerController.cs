@@ -7,19 +7,24 @@ public class PlayerController : MonoBehaviour
 {
     private CharacterController controller;
     private Vector3 direction;
-    public float fowardSpeed;
+    public float fowardSpeed = 8;
     public float maxSpeed;
     public bool isGrounded;
     public LayerMask groundLayer;
     public Transform groundCheck;
     private int desiredLane = 1; // di chuyển các làn 0 là làn trái 1 là giữa 2 là phải
-    public float landDistance = 4; // khoang cach giua 2 làn
-    public float jumpForce;
+    public float landDistance = 2.5f; // khoang cach giua 2 làn
+    public float jumpForce = 10;
     private bool isSliding = false;
     private bool isFalling = false;
     public float Gravity = -20;
     private Animator animator;
     private Coroutine slideCoroutine;
+    AudioManager audioManager;
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
     private void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -30,14 +35,14 @@ public class PlayerController : MonoBehaviour
 
         if (!PlayerManager.isGameStarted)
             return;
+
+        UpdateAnimation();
         //tăng tốc độ theo thời gian
         if (fowardSpeed < maxSpeed)
         {
             fowardSpeed += 0.2f * Time.deltaTime;
         }
-        animator.SetBool("isGameStarted", true);
-        animator.SetBool("isGrounded", isGrounded);
-        animator.SetBool("isFall",isFalling);
+
         direction.z = fowardSpeed;
 
         // Lấy ra đầu vào để di chuyển trên làn đường
@@ -121,14 +126,30 @@ public class PlayerController : MonoBehaviour
             return;
         controller.Move(direction * Time.fixedDeltaTime);
     }
+
+    void UpdateAnimation()
+    {
+        //Chỉ check animation khi cần thiết tối ưu
+        if (animator.GetBool("isGameStarted") != true)
+            animator.SetBool("isGameStarted", true);
+
+        if (animator.GetBool("isGrounded") != isGrounded)
+            animator.SetBool("isGrounded", isGrounded);
+
+        if (animator.GetBool("isFall") != isFalling)
+            animator.SetBool("isFall", isFalling);
+    }
+
     private void Jump()
     {
         direction.y = jumpForce;
     }
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other)
+    {
         if (other.transform.tag == "Obstacle")
         {
             PlayerManager.gameOver = true;
+            audioManager.PlaySFX(audioManager.death);
         }
     }
 
@@ -168,5 +189,5 @@ public class PlayerController : MonoBehaviour
         isSliding = false;
         animator.SetBool("isSliding", isSliding);
     }
-   
+
 }
