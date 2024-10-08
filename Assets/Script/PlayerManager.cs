@@ -1,49 +1,123 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
 public class PlayerManager : MonoBehaviour
 {
     public static bool gameOver;
     public static bool isGameStarted;
     public GameObject gameOverPanel;
-    public GameObject tabToSart;
+    public GameObject tabToStart;
     public static int numberOfCoin;
+    public static float playerScore;
 
+    public Transform player;
+
+    public TextMeshProUGUI distanceText;
+    public TextMeshProUGUI bestScoreText;  // Hiển thị best score
+    public TextMeshProUGUI scoreText;      // Hiển thị điểm số khi kết thúc
     public TextMeshProUGUI coinText;
-    AudioManager audioManager;
+
+    private AudioManager audioManager;
+
+    private float startingZ;    // Vị trí bắt đầu của player trên trục Z
+    private float bestScore;    // Điểm cao nhất đã lưu
 
     private void Awake()
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
+
     void Start()
+    {
+        ResetGameState();
+        LoadBestScore();
+        startingZ = player.position.z;  // Lưu lại vị trí Z ban đầu của player
+    }
+
+    void Update()
+    {
+        if (gameOver)
+        {
+            HandleGameOver();
+        }
+        else if (isGameStarted)
+        {
+            UpdatePlayerScore();
+        }
+
+        if (SwipeManager.tap && !isGameStarted)
+        {
+            StartGame();
+        }
+
+        // Cập nhật số coins
+        UpdateCoinText();
+    }
+
+    void ResetGameState()
     {
         gameOver = false;
         isGameStarted = false;
         Time.timeScale = 1;
         numberOfCoin = 0;
+        playerScore = 0;
+        gameOverPanel.SetActive(false);
+        distanceText.gameObject.SetActive(true);
+        coinText.gameObject.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    void LoadBestScore()
     {
-        if (gameOver)
-        {
-            Time.timeScale = 0;
-            gameOverPanel.SetActive(true);
-            // Dừng nhạc nền khi gameover
-            audioManager.StopMusic();
-        }
-        coinText.text = "Foods: " + numberOfCoin ;
-        if (SwipeManager.tap && !isGameStarted)
-        {
-            isGameStarted = true;
-            tabToSart.SetActive(false);
+        // Lấy best score đã lưu từ PlayerPrefs
+        bestScore = PlayerPrefs.GetFloat("BestScore", 0);
+        bestScoreText.text = "Best Score:\n " + bestScore.ToString("F2") + " m";
+    }
 
-            // Bật nhạc khi user nhấn zo màn hình lần đầu
-            audioManager.PlayMusic();
+    void HandleGameOver()
+    {
+        Time.timeScale = 0;
+        gameOverPanel.SetActive(true);
+        coinText.gameObject.SetActive(false);
+        distanceText.gameObject.SetActive(false);
+        SavePlayerData();
+        audioManager.StopMusic();
+        // Hiển thị điểm số cuối cùng của người chơi
+        scoreText.text = "Score:\n " + playerScore.ToString("F2") + " m";
+    }
+
+    void UpdatePlayerScore()
+    {
+        playerScore = player.position.z - startingZ;
+        distanceText.text = playerScore.ToString("F2") + " m";
+    }
+
+    void StartGame()
+    {
+        isGameStarted = true;
+        tabToStart.SetActive(false);
+        audioManager.PlayMusic();
+    }
+
+    void UpdateCoinText()
+    {
+        coinText.text = "Golds: " + numberOfCoin;
+    }
+
+    void SavePlayerData()
+    {
+        if (playerScore > bestScore)
+        {
+            bestScore = playerScore;
+            bestScoreText.text = "Best Score: " + bestScore.ToString("F2") + " m";
+            PlayerPrefs.SetFloat("BestScore", bestScore);
         }
+        int totalCoins = PlayerPrefs.GetInt("Coins", 0);
+        Debug.Log("Số coin trước khi chơi: " + totalCoins);  
+        totalCoins += numberOfCoin;
+        Debug.Log("Số coin đã cộng trong màn chơi này: " + numberOfCoin); 
+        Debug.Log("Số coin tổng sau khi cộng: " + totalCoins);  
+        PlayerPrefs.SetInt("Coins", totalCoins);
+        PlayerPrefs.Save();  
     }
 }

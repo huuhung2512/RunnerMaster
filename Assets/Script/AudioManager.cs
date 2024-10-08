@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -11,6 +12,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip background;
     public AudioClip death;
     public AudioClip pickUpCoin;
+    public AudioClip buttonClick;
     private void Start() {
         musicSource.clip = background;
     }
@@ -24,5 +26,8 @@ public class AudioManager : MonoBehaviour
         if(musicSource.isPlaying){
             musicSource.Stop();
         }
+    }
+    public void ButtonClick(){
+        SFXSource.PlayOneShot(buttonClick);
     }
 }
