@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private CharacterController controller;
+    [SerializeField] PlayerManager playerManager;
     private Vector3 direction;
     public float fowardSpeed = 8;
     public float maxSpeed;
@@ -16,7 +17,7 @@ public class PlayerController : MonoBehaviour
     private bool isSliding = false;
     private bool isFalling = false;
     public float gravity = -20;
-    private Animator animator;
+    public Animator animator;
     private Coroutine slideCoroutine;
     private AudioManager audioManager;
     
@@ -33,7 +34,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         controller = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
+        // animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -148,6 +149,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Obstacle"))
         {
             PlayerManager.gameOver = true;
+            playerManager.HandleGameOver();
             audioManager.PlaySFX(audioManager.death);
         }
     }

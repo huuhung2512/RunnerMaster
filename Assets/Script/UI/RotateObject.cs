@@ -4,36 +4,43 @@ using UnityEngine;
 
 public class RotateObject : MonoBehaviour
 {
-    // Start is called before the first frame update
- public GameObject targetObject; // Đối tượng muốn xoay
-public float rotationSpeed = 5f; // Tốc độ xoay
-private Quaternion targetRotation; // Góc xoay mục tiêu
+    public GameObject[] targetObjects; 
+    public float rotationSpeed = 5f; 
+    private Quaternion[] targetRotations;
 
-void Start()
-{
-    targetRotation = targetObject.transform.rotation; // Lưu góc xoay ban đầu
-}
-
-void Update()
-{
-    // Kiểm tra các cử chỉ vuốt từ SwipeManager
-    if (SwipeManager.swipeLeft)
+    void Start()
     {
-        // Thêm góc xoay cho trục Y khi vuốt sang trái
-        targetRotation *= Quaternion.Euler(0, 90, 0);
-    }
-    if (SwipeManager.swipeRight)
-    {
-        // Thêm góc xoay cho trục Y khi vuốt sang phải
-        targetRotation *= Quaternion.Euler(0, -90, 0);
+        targetRotations = new Quaternion[targetObjects.Length];
+        for (int i = 0; i < targetObjects.Length; i++)
+        {
+            targetRotations[i] = targetObjects[i].transform.rotation; 
+        }
     }
 
-    // Nội suy giữa góc hiện tại và góc mục tiêu
-    targetObject.transform.rotation = Quaternion.Lerp(
-        targetObject.transform.rotation, 
-        targetRotation, 
-        Time.deltaTime * rotationSpeed
-    );
-}
+    void Update()
+    {
+        if (SwipeManager.swipeLeft)
+        {
+            for (int i = 0; i < targetObjects.Length; i++)
+            {
+                targetRotations[i] *= Quaternion.Euler(0, 30, 0);
+            }
+        }
+        if (SwipeManager.swipeRight)
+        {
+            for (int i = 0; i < targetObjects.Length; i++)
+            {
+                targetRotations[i] *= Quaternion.Euler(0, -30, 0);
+            }
+        }
 
+        for (int i = 0; i < targetObjects.Length; i++)
+        {
+            targetObjects[i].transform.rotation = Quaternion.Lerp(
+                targetObjects[i].transform.rotation, 
+                targetRotations[i], 
+                Time.deltaTime * rotationSpeed
+            );
+        }
+    }
 }

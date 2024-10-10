@@ -39,7 +39,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (gameOver)
         {
-            HandleGameOver();
+           // HandleGameOver();
         }
         else if (isGameStarted)
         {
@@ -74,7 +74,7 @@ public class PlayerManager : MonoBehaviour
         bestScoreText.text = "Best Score:\n " + bestScore.ToString("F2") + " m";
     }
 
-    void HandleGameOver()
+    public void HandleGameOver()
     {
         Time.timeScale = 0;
         gameOverPanel.SetActive(true);
@@ -113,10 +113,7 @@ public class PlayerManager : MonoBehaviour
             PlayerPrefs.SetFloat("BestScore", bestScore);
         }
         int totalCoins = PlayerPrefs.GetInt("Coins", 0);
-        Debug.Log("Số coin trước khi chơi: " + totalCoins);  
         totalCoins += numberOfCoin;
-        Debug.Log("Số coin đã cộng trong màn chơi này: " + numberOfCoin); 
-        Debug.Log("Số coin tổng sau khi cộng: " + totalCoins);  
         PlayerPrefs.SetInt("Coins", totalCoins);
         PlayerPrefs.Save();  
     }
