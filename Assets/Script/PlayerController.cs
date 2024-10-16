@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     private Coroutine slideCoroutine;
     private AudioManager audioManager;
-    
+
     private const float slideDuration = 1.1f;
     private const float groundCheckRadius = 0.15f;
     private const float speedIncreaseRate = 0.2f;
@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         controller = GetComponent<CharacterController>();
-        // animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -161,9 +160,7 @@ public class PlayerController : MonoBehaviour
         SetAnimatorBool("isSliding", true);
         controller.center = new Vector3(0, 0.225f, 0);
         controller.height = 0f;
-        
         float elapsedTime = 0f;
-        
         while (elapsedTime < slideDuration)
         {
             if (SwipeManager.swipeUp && isGrounded)
@@ -175,7 +172,6 @@ public class PlayerController : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         ResetSlide();
     }
 

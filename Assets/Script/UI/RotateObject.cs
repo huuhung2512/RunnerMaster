@@ -5,42 +5,16 @@ using UnityEngine;
 public class RotateObject : MonoBehaviour
 {
     public GameObject[] targetObjects; 
-    public float rotationSpeed = 5f; 
-    private Quaternion[] targetRotations;
-
-    void Start()
-    {
-        targetRotations = new Quaternion[targetObjects.Length];
-        for (int i = 0; i < targetObjects.Length; i++)
-        {
-            targetRotations[i] = targetObjects[i].transform.rotation; 
-        }
-    }
+    public float rotationSpeed = 50f; 
 
     void Update()
     {
-        if (SwipeManager.swipeLeft)
+        foreach (GameObject obj in targetObjects)
         {
-            for (int i = 0; i < targetObjects.Length; i++)
+            if (obj != null)
             {
-                targetRotations[i] *= Quaternion.Euler(0, 30, 0);
+                obj.transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
             }
-        }
-        if (SwipeManager.swipeRight)
-        {
-            for (int i = 0; i < targetObjects.Length; i++)
-            {
-                targetRotations[i] *= Quaternion.Euler(0, -30, 0);
-            }
-        }
-
-        for (int i = 0; i < targetObjects.Length; i++)
-        {
-            targetObjects[i].transform.rotation = Quaternion.Lerp(
-                targetObjects[i].transform.rotation, 
-                targetRotations[i], 
-                Time.deltaTime * rotationSpeed
-            );
         }
     }
 }

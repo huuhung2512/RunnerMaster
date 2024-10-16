@@ -13,6 +13,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip death;
     public AudioClip pickUpCoin;
     public AudioClip buttonClick;
+    public AudioClip buying;
     private void Start() {
         musicSource.clip = background;
     }
@@ -26,6 +27,9 @@ public class AudioManager : MonoBehaviour
         if(musicSource.isPlaying){
             musicSource.Stop();
         }
+    }
+    public void Buying(){
+        SFXSource.PlayOneShot(buying);
     }
     public void ButtonClick(){
         SFXSource.PlayOneShot(buttonClick);

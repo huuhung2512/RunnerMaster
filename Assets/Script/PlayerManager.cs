@@ -37,20 +37,15 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {
-        if (gameOver)
-        {
-           // HandleGameOver();
-        }
-        else if (isGameStarted)
+        
+        if (isGameStarted)
         {
             UpdatePlayerScore();
         }
-
         if (SwipeManager.tap && !isGameStarted)
         {
             StartGame();
         }
-
         // Cập nhật số coins
         UpdateCoinText();
     }
@@ -71,7 +66,7 @@ public class PlayerManager : MonoBehaviour
     {
         // Lấy best score đã lưu từ PlayerPrefs
         bestScore = PlayerPrefs.GetFloat("BestScore", 0);
-        bestScoreText.text = "Best Score:\n " + bestScore.ToString("F2") + " m";
+        bestScoreText.text = "Best Score:\n " + bestScore.ToString("F0") + " m";
     }
 
     public void HandleGameOver()
@@ -83,13 +78,13 @@ public class PlayerManager : MonoBehaviour
         SavePlayerData();
         audioManager.StopMusic();
         // Hiển thị điểm số cuối cùng của người chơi
-        scoreText.text = "Score:\n " + playerScore.ToString("F2") + " m";
+        scoreText.text = "Score:\n " + playerScore.ToString("F0") + " m";
     }
 
     void UpdatePlayerScore()
     {
         playerScore = player.position.z - startingZ;
-        distanceText.text = playerScore.ToString("F2") + " m";
+        distanceText.text = playerScore.ToString("F0") + " m";
     }
 
     void StartGame()
@@ -109,7 +104,7 @@ public class PlayerManager : MonoBehaviour
         if (playerScore > bestScore)
         {
             bestScore = playerScore;
-            bestScoreText.text = "Best Score: " + bestScore.ToString("F2") + " m";
+            bestScoreText.text = "Best Score: " + bestScore.ToString("F0") + " m";
             PlayerPrefs.SetFloat("BestScore", bestScore);
         }
         int totalCoins = PlayerPrefs.GetInt("Coins", 0);
