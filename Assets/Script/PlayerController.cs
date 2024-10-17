@@ -19,17 +19,11 @@ public class PlayerController : MonoBehaviour
     public float gravity = -20;
     public Animator animator;
     private Coroutine slideCoroutine;
-    private AudioManager audioManager;
 
     private const float slideDuration = 1.1f;
     private const float groundCheckRadius = 0.15f;
     private const float speedIncreaseRate = 0.2f;
     private const float slideGravityMultiplier = 100;
-
-    private void Awake()
-    {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-    }
 
     private void Start()
     {
@@ -38,7 +32,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (!PlayerManager.isGameStarted)
+        // Kiểm tra nếu game đã bị tạm dừng hoặc kết thúc
+        if (!PlayerManager.isGameStarted || PlayerManager.gameOver || PlayerManager.isPaused)
             return;
 
         UpdateAnimation();
@@ -84,6 +79,18 @@ public class PlayerController : MonoBehaviour
         MoveToDesiredLane();
     }
 
+    private void FixedUpdate()
+    {
+        // Kiểm tra nếu game đã bị tạm dừng hoặc kết thúc
+        if (PlayerManager.isPaused || PlayerManager.gameOver)
+            return;
+
+        if (PlayerManager.isGameStarted)
+        {
+            controller.Move(direction * Time.fixedDeltaTime);
+        }
+    }
+
     private void MoveToDesiredLane()
     {
         Vector3 targetPosition = transform.position.z * transform.forward + transform.position.y * transform.up;
@@ -100,14 +107,6 @@ public class PlayerController : MonoBehaviour
         controller.Move(moveDir.sqrMagnitude < diff.sqrMagnitude ? moveDir : diff);
     }
 
-    private void FixedUpdate()
-    {
-        if (PlayerManager.isGameStarted)
-        {
-            controller.Move(direction * Time.fixedDeltaTime);
-        }
-    }
-
     private void UpdateAnimation()
     {
         SetAnimatorBool("isGameStarted", true);
@@ -122,7 +121,8 @@ public class PlayerController : MonoBehaviour
             animator.SetBool(parameter, value);
         }
     }
-    //nếu player lướt lên sẽ nhảy luôn
+
+    // Nếu player lướt lên sẽ nhảy luôn
     private void HandleJumpWhileSliding()
     {
         if (isSliding && slideCoroutine != null)
@@ -148,8 +148,9 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Obstacle"))
         {
             PlayerManager.gameOver = true;
+            animator.SetBool("isGameOver",true);
             playerManager.HandleGameOver();
-            audioManager.PlaySFX(audioManager.death);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.death);
         }
     }
 

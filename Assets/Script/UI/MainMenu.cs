@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
     {
         int totalCoins = PlayerPrefs.GetInt("Coins", 0);
         coinsText.text = totalCoins.ToString();
+        Time.timeScale = 1;
     }
 
 }

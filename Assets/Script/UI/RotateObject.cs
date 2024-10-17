@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class RotateObject : MonoBehaviour
 {
-    public GameObject[] targetObjects; 
     public float rotationSpeed = 50f; 
-
+    private void Start() {
+        Time.timeScale =1;
+    }
     void Update()
     {
-        foreach (GameObject obj in targetObjects)
+        if(gameObject.activeInHierarchy)
         {
-            if (obj != null)
-            {
-                obj.transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
-            }
+            gameObject.transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f);
         }
     }
 }

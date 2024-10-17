@@ -80,7 +80,7 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Cannot save character because it is not unlocked!");
+            Debug.Log("Nhan vat chua duoc mo khoa");
         }
     }
     void UpdateEquip()

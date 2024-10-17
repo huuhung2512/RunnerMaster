@@ -308,3 +308,4 @@ MonoBehaviour:
   death: {fileID: 8300000, guid: baedaebc217e74846a8cda9b3153c5ef, type: 3}
   pickUpCoin: {fileID: 8300000, guid: a47b0d0816815d0409203550130bda5e, type: 3}
   buttonClick: {fileID: 8300000, guid: a9aa1f33c2ed5004fad2422024b64797, type: 3}
+  buying: {fileID: 8300000, guid: 9a761ae8779216640be2928ab55ee24a, type: 3}
