@@ -22,15 +22,11 @@ public class AudioManager : Singleton<AudioManager>
     // Trạng thái âm thanh
     private bool isMusicOn = true;
     private bool isSFXOn = true;
-    [SerializeField] private Button musicButton; 
-    [SerializeField] private Button sfxButton;   
     private void Start()
     {
         PlayMenuMusic();
-        musicButton.GetComponentInChildren<TextMeshProUGUI>().text = "OFF";
-        sfxButton.GetComponentInChildren<TextMeshProUGUI>().text = "OFF";
     }
-
+   
     public void PlaySFX(AudioClip clip)
     {
         if (isSFXOn) // Kiểm tra trạng thái âm thanh hiệu ứng
@@ -85,27 +81,35 @@ public class AudioManager : Singleton<AudioManager>
         PlaySFX(buttonClick);
     }
 
-    // Hàm để bật/tắt nhạc
+    // Hàm để ON/OFF nhạc
     public void ToggleMusic()
     {
         isMusicOn = !isMusicOn;
-
+        PlayerPrefs.SetInt("MusicSetting", isMusicOn ? 1 : 0);
         if (isMusicOn)
         {
             PlayMenuMusic();
-            musicButton.GetComponentInChildren<TextMeshProUGUI>().text = "OFF"; // Cập nhật nhãn
+            Debug.Log("Nhac bat");
         }
         else
         {
             StopMusicPlay();
             StopMusicMenu();
-            musicButton.GetComponentInChildren<TextMeshProUGUI>().text = "ON"; // Cập nhật nhãn
+            Debug.Log("Nhac tat");
         }
+        string musicText = isMusicOn ? "OFF" : "ON";
+        PanelSettingUI.Instance.SetTextMusic(musicText);
+        PlayerPrefs.SetString("MusicText", musicText);
+        PlayerPrefs.Save();
     }
 
     public void ToggleSFX()
     {
         isSFXOn = !isSFXOn;
-        sfxButton.GetComponentInChildren<TextMeshProUGUI>().text = isSFXOn ? "OFF" : "ON"; // Cập nhật nhãn
+        PlayerPrefs.SetInt("SFXSetting", isSFXOn ? 1 : 0);
+        string sfxText = isSFXOn ? "OFF" : "ON";
+        PanelSettingUI.Instance.SetTextSound(sfxText);
+        PlayerPrefs.SetString("SFXText", sfxText);
+        PlayerPrefs.Save();
     }
 }

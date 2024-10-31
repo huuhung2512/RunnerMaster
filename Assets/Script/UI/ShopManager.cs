@@ -4,7 +4,7 @@ using TMPro; // Thư viện cho TextMeshPro
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopManager : MonoBehaviour
+public class ShopManager : SingletonBehavior<ShopManager>
 {
     public int savedCharacter;
     public int currentCharacter;

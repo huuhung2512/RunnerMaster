@@ -2,7 +2,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using TMPro;
 using System;
-public class MainMenu : MonoBehaviour
+public class MainMenu : SingletonBehavior<MainMenu>
 {
     public TextMeshProUGUI coinsText;
     public void PlayGame()
@@ -16,7 +16,6 @@ public class MainMenu : MonoBehaviour
     {
         int totalCoins = PlayerPrefs.GetInt("Coins", 0);
         coinsText.text = totalCoins.ToString();
-        Time.timeScale = 1;
     }
 
 }
