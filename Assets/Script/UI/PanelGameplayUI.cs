@@ -24,13 +24,14 @@ public class PanelGameplayUI : MonoBehaviour
     }
     private void OnShopClick()
     {
-       
+
+        AudioManager.Instance.ButtonClick();
         UIManager.Instance.OnHideAllPanel();
         UIManager.Instance.OnShowPanelShop(true);
-        Debug.Log("AAAAAAAAAAA");
     }
     private void OnSettinglick()
     {
+        AudioManager.Instance.ButtonClick();
         UIManager.Instance.OnHideAllPanel();
         UIManager.Instance.OnShowPanelSetting(true);
     }

@@ -35,22 +35,26 @@ public class PanelShopUI : MonoBehaviour
     private void OnpreChar()
     {
         ShopManager.Instance.ChangePre();
+        AudioManager.Instance.ButtonClick();
     }
 
     private void OnNextChar()
     {
         ShopManager.Instance.ChangeNext();
+        AudioManager.Instance.ButtonClick();
     }
 
     private void OnEquipChar()
     {
         ShopManager.Instance.SaveChange();
+        AudioManager.Instance.ButtonClick();
     }
 
     private void OnReturnClick()
     {
         UIManager.Instance.OnHideAllPanel();
         UIManager.Instance.OnShowPanelGameplay(true);
+        AudioManager.Instance.ButtonClick();
         ShopManager.Instance.ExitShop();
     }
 }

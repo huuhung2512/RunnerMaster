@@ -16,7 +16,7 @@ public class Coin : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if(other.tag == "Player"){
             audioManager.PlaySFX(audioManager.pickUpCoin);
-            PlayerManager.numberOfCoin+=1;
+            PlayerManager.numberOfCoin += 1;
             Destroy(gameObject);
         }
     }

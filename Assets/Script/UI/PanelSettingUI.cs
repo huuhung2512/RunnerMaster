@@ -48,16 +48,19 @@ public class PanelSettingUI : SingletonBehavior<PanelSettingUI>
     }
     private void OnShowLinkInfo()
     {
+        AudioManager.Instance.ButtonClick();
         MainMenu.Instance.OpenURL("https://www.facebook.com/hunghuu2512");
     }
 
     private void OnShowLinkFace()
     {
+        AudioManager.Instance.ButtonClick();
         MainMenu.Instance.OpenURL("https://huuhung2512.itch.io/");
     }
 
     private void OnShowTutorialClick()
     {
+        AudioManager.Instance.ButtonClick();
         panelMainSetting.gameObject.SetActive(false);
         panelTutorial.gameObject.SetActive(true);
     }
@@ -65,7 +68,6 @@ public class PanelSettingUI : SingletonBehavior<PanelSettingUI>
     public void SetTextSound(string text)
     {
         btnOnOffSoundTxt.text = text;
-
     }
 
     public void SetTextMusic(string text)
@@ -74,6 +76,7 @@ public class PanelSettingUI : SingletonBehavior<PanelSettingUI>
     }
     public void OnReturnClick()
     {
+        AudioManager.Instance.ButtonClick();
         UIManager.Instance.OnHideAllPanel();
         UIManager.Instance.OnShowPanelGameplay(true);
     }
@@ -81,11 +84,13 @@ public class PanelSettingUI : SingletonBehavior<PanelSettingUI>
     private void OnOnOffSoundClick()
     {
         AudioManager.Instance.ToggleSFX();
+        AudioManager.Instance.ButtonClick();
     }
 
     private void OnOnOffMusicClick()
     {
         AudioManager.Instance.ToggleMusic();
+        AudioManager.Instance.ButtonClick();
     }
 
 }
