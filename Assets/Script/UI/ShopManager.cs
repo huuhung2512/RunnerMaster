@@ -80,7 +80,7 @@ public class ShopManager : SingletonBehavior<ShopManager>
         }
         else
         {
-            Debug.Log("Nhan vat chua duoc mo khoa");
+            Debug.Log("Cannot save character because it is not unlocked!");
         }
     }
     void UpdateEquip()

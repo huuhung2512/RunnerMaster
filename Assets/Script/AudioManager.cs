@@ -1,23 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-public class AudioManager : Singleton<AudioManager>
+
+public class AudioManager : MonoBehaviour
 {
     [Header("----------AUDIO SOURCE-----------------")]
-    [SerializeField] AudioSource musicSourcePlay;
-    [SerializeField] AudioSource musicSourceMenu;
+    [SerializeField] AudioSource musicSource;
     [SerializeField] AudioSource SFXSource;
-
     [Header("----------AUDIO CLIP--------------------")]
     public AudioClip background;
-    public AudioClip backgroundMenu;
     public AudioClip death;
     public AudioClip pickUpCoin;
     public AudioClip buttonClick;
     public AudioClip buying;
+<<<<<<< HEAD
 
     // Trạng thái âm thanh
     private bool isMusicOn = true;
@@ -32,18 +29,26 @@ public class AudioManager : Singleton<AudioManager>
         if (isSFXOn) // Kiểm tra trạng thái âm thanh hiệu ứng
         {
             SFXSource.PlayOneShot(clip);
+=======
+    private void Start() {
+        musicSource.clip = background;
+    }
+    public void PlaySFX(AudioClip clip){
+        SFXSource.PlayOneShot(clip);
+    }
+    public void PlayMusic(){
+        musicSource.Play();
+    }
+    public void StopMusic(){
+        if(musicSource.isPlaying){
+            musicSource.Stop();
+>>>>>>> parent of 1a2e418 (Done)
         }
     }
-
-    public void PlayGameMusic()
-    {
-        if (isMusicOn)
-        {
-            StopMusicMenu();
-            musicSourcePlay.clip = background;
-            musicSourcePlay.Play();
-        }
+    public void Buying(){
+        SFXSource.PlayOneShot(buying);
     }
+<<<<<<< HEAD
 
     public void PlayMenuMusic()
     {
@@ -111,5 +116,9 @@ public class AudioManager : Singleton<AudioManager>
         PanelSettingUI.Instance.SetTextSound(sfxText);
         PlayerPrefs.SetString("SFXText", sfxText);
         PlayerPrefs.Save();
+=======
+    public void ButtonClick(){
+        SFXSource.PlayOneShot(buttonClick);
+>>>>>>> parent of 1a2e418 (Done)
     }
 }

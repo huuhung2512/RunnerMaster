@@ -6,21 +6,27 @@ public class PlayerManager : MonoBehaviour
 {
     public static bool gameOver;
     public static bool isGameStarted;
-    public static bool isPaused;    // Biến để kiểm tra xem game có bị tạm dừng hay không
     public GameObject gameOverPanel;
     public GameObject tabToStart;
     public static int numberOfCoin;
     public static float playerScore;
 
     public Transform player;
-    public TextMeshProUGUI coinText;
+
     public TextMeshProUGUI distanceText;
     public TextMeshProUGUI bestScoreText;  // Hiển thị best score
     public TextMeshProUGUI scoreText;      // Hiển thị điểm số khi kết thúc
-    [SerializeField] private Animator scoreTextAnim;
-    [SerializeField] private Animator bestScoreTextAnim;
+    public TextMeshProUGUI coinText;
+
+    private AudioManager audioManager;
+
     private float startingZ;    // Vị trí bắt đầu của player trên trục Z
     private float bestScore;    // Điểm cao nhất đã lưu
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     void Start()
     {
@@ -31,8 +37,7 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {
-        if (isPaused || gameOver) return;  // Nếu game đang bị tạm dừng hoặc game over thì không làm gì cả
-
+        
         if (isGameStarted)
         {
             UpdatePlayerScore();
@@ -49,7 +54,7 @@ public class PlayerManager : MonoBehaviour
     {
         gameOver = false;
         isGameStarted = false;
-        isPaused = false;  // Khởi tạo trạng thái không tạm dừng
+        Time.timeScale = 1;
         numberOfCoin = 0;
         playerScore = 0;
         gameOverPanel.SetActive(false);
@@ -66,26 +71,14 @@ public class PlayerManager : MonoBehaviour
 
     public void HandleGameOver()
     {
-        gameOver = true;
+        Time.timeScale = 0;
         gameOverPanel.SetActive(true);
         coinText.gameObject.SetActive(false);
         distanceText.gameObject.SetActive(false);
         SavePlayerData();
-        AudioManager.Instance.StopMusicPlay();
+        audioManager.StopMusic();
         // Hiển thị điểm số cuối cùng của người chơi
         scoreText.text = "Score:\n " + playerScore.ToString("F0") + " m";
-        if (playerScore > bestScore)
-        {
-            scoreTextAnim.speed = 0;
-            bestScoreTextAnim.speed = 1;
-            Debug.Log("dang bat anim bestScore");
-        }
-        else
-        {
-            scoreTextAnim.speed = 1;
-            bestScoreTextAnim.speed = 0;
-            Debug.Log("0 bat anim bestScore");
-        }
     }
 
     void UpdatePlayerScore()
@@ -98,7 +91,7 @@ public class PlayerManager : MonoBehaviour
     {
         isGameStarted = true;
         tabToStart.SetActive(false);
-        AudioManager.Instance.PlayGameMusic();
+        audioManager.PlayMusic();
     }
 
     void UpdateCoinText()
@@ -112,26 +105,11 @@ public class PlayerManager : MonoBehaviour
         {
             bestScore = playerScore;
             bestScoreText.text = "Best Score: " + bestScore.ToString("F0") + " m";
-
             PlayerPrefs.SetFloat("BestScore", bestScore);
         }
         int totalCoins = PlayerPrefs.GetInt("Coins", 0);
         totalCoins += numberOfCoin;
         PlayerPrefs.SetInt("Coins", totalCoins);
-        PlayerPrefs.Save();
-    }
-
-    // Hàm để dừng game thủ công
-    public void PauseGame()
-    {
-        isPaused = true;
-        AudioManager.Instance.StopMusicPlay();  // Tạm dừng nhạc khi tạm dừng game
-    }
-
-    // Hàm để tiếp tục game sau khi tạm dừng
-    public void ResumeGame()
-    {
-        isPaused = false;
-        AudioManager.Instance.PlayGameMusic();  // Tiếp tục nhạc khi tiếp tục game
+        PlayerPrefs.Save();  
     }
 }
